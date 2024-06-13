@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #notifications, #messages {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Notificaciones</h1>
+    <div id="notifications"></div>
+
+    <h1>Mensajes</h1>
+    <div id="messages"></div>
+
+    <script>
+        const notificationSource = new EventSource("http://localhost:3000/new-notification");
+        const messageSource = new EventSource("http://localhost:3000/new-message");
+
+        const notificationsDiv = document.getElementById('notifications');
+        const messagesDiv = document.getElementById('messages');
+
+        notificationSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const p = document.createElement('p');
+            p.textContent = data.notification;
+            notificationsDiv.appendChild(p);
+        };
+
+        messageSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const p = document.createElement('p');
+            p.textContent = data.message;
+            messagesDiv.appendChild(p);
+        };
+    </script>
+</body>
+</html>
